@@ -9,6 +9,10 @@ class Direction:
         return [cls.WEST, cls.NORTH, cls.EAST, cls.SOUTH]
 
 class Tile:
+    BLOCKED   = '*'
+    EMPTY     = '-'
+    FILLED    = '='
+
     def __init__(self, value):
         self.value = value
         self.neighbors = {}
@@ -34,16 +38,16 @@ class Tile:
         return tile
 
     def blocked(self):
-        return self.value == '*'
+        return self.value == Tile.BLOCKED
 
     def known(self):
-        return self.value not in ['*', '-']
+        return self.value not in [Tile.BLOCKED, Tile.EMPTY]
 
     def empty(self):
-        return self.value == '-'
+        return self.value == Tile.EMPTY
 
     def given(self):
-        return self.value != '=' and self.known()
+        return self.value != Tile.FILLED and self.known()
 
     def surrounded(self):
         for direction in Direction.directions():
@@ -81,10 +85,10 @@ class Tile:
         return next
 
     def update(self, block=False):
-        if self.value == '-' and block:
-            self.value = '*'
-        elif self.value == '-':
-            self.value = '='
+        if self.value == Tile.EMPTY and block:
+            self.value = Tile.BLOCKED
+        elif self.value == Tile.EMPTY:
+            self.value = Tile.FILLED
 
     def fill(self, amount, direction, add_block=False):
         next = self[direction]
