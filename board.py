@@ -10,7 +10,7 @@ class Direction:
 
 class Tile:
     BLOCKED   = '*'
-    EMPTY     = '-'
+    EMPTY     = '.'
     FILLED    = '='
 
     def __init__(self, value):
@@ -45,6 +45,9 @@ class Tile:
 
     def empty(self):
         return self.value == Tile.EMPTY
+
+    def filled(self):
+        return self.value == Tile.FILLED
 
     def given(self):
         return self.value != Tile.FILLED and self.known()
@@ -84,11 +87,13 @@ class Tile:
             next = next[direction]
         return next
 
-    def update(self, block=False):
+    def update(self, block=False, num=0):
         if self.value == Tile.EMPTY and block:
             self.value = Tile.BLOCKED
         elif self.value == Tile.EMPTY:
             self.value = Tile.FILLED
+        elif self.value == Tile.FILLED and num > 0:
+            self.value = num
 
     def fill(self, amount, direction, add_block=False):
         next = self[direction]
@@ -165,11 +170,19 @@ class Board:
                         amount = tile.value - sum([tile.max_sees(d) for d in Direction.directions() if d != direction])
                         tile.fill(amount, direction)
 
+    def replace_filled(self):
+        if self.is_complete() and self.is_correct:
+            for r, row in enumerate(self.board):
+                for c, tile in enumerate(row):
+                    if tile.filled():
+                        tile.update(False, tile.sees())
+
     def solve(self, iterations=0):
         if iterations == 0:
             while not self.is_complete():
                 self.fill_via_contrapositive()
                 self.fill_via_counting()
+            self.replace_filled()
         else:
             for _ in xrange(iterations):
                 if not self.is_complete():
@@ -177,3 +190,4 @@ class Board:
                     self.fill_via_counting()
                 else:
                     return
+            self.replace_filled()
