@@ -1,1 +1,1 @@
-`./solve puzzles/9x9.txt`
+`./solve.py puzzles/9x9.txt`
