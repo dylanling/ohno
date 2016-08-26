@@ -1,0 +1,1 @@
+`./solve puzzles/9x9.txt`
