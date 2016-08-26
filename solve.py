@@ -1,15 +1,8 @@
 #!/usr/bin/env python
 
 from sys import argv
-from pprint import pprint
-from board import Board
-
-def grid_from_file(filename):
-    grid = []
-    with open(filename) as f:
-        for line in f.readlines():
-            grid.append(map(lambda x: int(x) if x.isdigit() else x, line.rstrip()))
-    return grid
+from ohno.utils import grid_from_file
+from ohno.board import Board
 
 b = Board(grid_from_file(argv[1]))
 b.draw()

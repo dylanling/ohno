@@ -9,9 +9,9 @@ class Direction:
         return [cls.WEST, cls.NORTH, cls.EAST, cls.SOUTH]
 
 class Tile:
-    BLOCKED   = '*'
+    BLOCKED   = '#'
     EMPTY     = '.'
-    FILLED    = '='
+    FILLED    = '&'
 
     def __init__(self, value):
         self.value = value
@@ -121,10 +121,10 @@ class Board:
         return self.board[i]
 
     def draw(self):
-        print '~' * (len(self.board) * 2 - 1)
+        #print '~' * (len(self.board) * 2 - 1)
         for row in self.board:
-            print ' '.join(map(str, row))
-        print '~' * (len(self.board) * 2 - 1)
+            print '    '.join(map(str, row)) + '\n'
+        #print '~' * (len(self.board) * 2 - 1)
 
     def is_complete(self):
         for row in self.board:
